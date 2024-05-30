@@ -116,7 +116,7 @@ class Worker(Service):
         stdout: Optional[IO] = sys.stdout,
         stderr: Optional[IO] = sys.stderr,
         console_port: int = 50101,
-        console_host: str = "127.0.0.1",
+        console_host: str = "0.0.0.0",
         loghandlers: Optional[List[Handler]] = None,
         blocking_timeout: Seconds = 10.0,
         loop: Optional[asyncio.AbstractEventLoop] = None,
