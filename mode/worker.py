@@ -87,6 +87,7 @@ class Worker(Service):
     loglevel: Optional[Union[str, int]]
     logfile: Optional[Union[str, IO]]
     console_port: int
+    console_host: str
     loghandlers: List[Handler]
     redirect_stdouts: bool
     redirect_stdouts_level: int
@@ -115,6 +116,7 @@ class Worker(Service):
         stdout: Optional[IO] = sys.stdout,
         stderr: Optional[IO] = sys.stderr,
         console_port: int = 50101,
+        console_host: str = "127.0.0.1",
         loghandlers: Optional[List[Handler]] = None,
         blocking_timeout: Seconds = 10.0,
         loop: Optional[asyncio.AbstractEventLoop] = None,
@@ -137,6 +139,7 @@ class Worker(Service):
         self.stdout = sys.stdout if stdout is None else stdout
         self.stderr = sys.stderr if stderr is None else stderr
         self.console_port = console_port
+        self.console_host = console_host
         self.blocking_timeout = blocking_timeout
         self.daemon = daemon
         super().__init__(loop=loop, **kwargs)
@@ -352,7 +355,9 @@ class Worker(Service):
             )
         else:
             monitor = aiomonitor.start_monitor(
-                port=self.console_port, loop=self.loop
+                port=self.console_port,
+                host=self.console_host,
+                loop=self.loop,
             )
             self.add_context(monitor)
 
